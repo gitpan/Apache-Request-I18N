@@ -1,0 +1,35 @@
+Revision history for Perl extension Apache::Request::I18N.
+
+0.04  Sun Nov 27 23:57:13 2005
+	- First public release
+	- Brought the documentation to an acceptable level
+
+	Changes:
+	- It is now a fatal error to have an empty DECODE_PARMS
+	- It is no longer a fatal error to provide Apache::Request arguments
+	  to new() or instance() if the Apache::Request object already exists
+	- Calling args() now produces a warning
+
+	Enhancements:
+	- It should now be possible to subclass this module
+	- The Content-Type charset for x-www-form-urlencoded is now used, if
+	  provided
+	- Support was added for language specification in encoded words
+	  (RFC 2184, section 5)
+
+	Bugfixes:
+	- Form fields in the query string are no longer decoded for
+	  multipart/form-data
+	- handler() now returns DECLINED instead of OK
+	- instance() was ignoring any previously existing Apache::Request
+
+0.03  Fri Nov 25 15:30:25 2005
+	- Bugfix: upload(NAME) crashed if no upload by that name existed
+
+0.02  Mon Aug  8 12:48:00 2005
+	- Bugfix when erroneously supplying Apache::Request options
+
+0.01  Sat Jul 16 14:06:47 2005
+	- original version; created by h2xs 1.23 with options
+		-AXn Apache::Request::I18N -b 5.8.0
+

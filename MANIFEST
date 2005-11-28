@@ -1,0 +1,7 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/Apache-Request-I18N.t
+lib/Apache/Request/I18N.pm
+META.yml                                 Module meta-data (added by MakeMaker)
