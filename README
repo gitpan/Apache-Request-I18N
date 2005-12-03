@@ -1,4 +1,4 @@
-Apache-Request-I18N version 0.04
+Apache-Request-I18N version 0.05
 ================================
 
 This module adds transparent support over Apache::Request for

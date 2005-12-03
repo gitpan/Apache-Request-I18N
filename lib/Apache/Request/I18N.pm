@@ -10,7 +10,7 @@ use Encode qw(decode_utf8 encode_utf8);
 
 our @ISA = 'Apache::Request';
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 
 =head1 NAME
@@ -193,6 +193,14 @@ sub parms {
 
 sub upload {
 	my ($self, $arg) = @_;
+
+	my $upload_class = ref($self);
+	$upload_class =~ s/\bRequest\b/Upload/;
+	unless ($upload_class->isa('Apache::Upload::I18N')) {
+		no strict 'refs';
+		carp "\@$upload_class\::ISA should contain Apache::Upload::I18N";
+		push @{"$upload_class\::ISA"}, 'Apache::Upload::I18N';
+	}
 	
 	# upload(UPLOAD) is implemented, but undefined, so there's little
 	# harm in not supporting it...
@@ -205,7 +213,7 @@ sub upload {
 		my @uploads = $self->SUPER::upload;
 		my %uploads;
 		foreach (@uploads) {
-			Apache::Upload::I18N->rebless($_, $self);
+			$upload_class->rebless($_, $self);
 			push @{ $uploads{ $_->name } }, $_;
 		}
 		$self->{_uploads} = \@uploads;
@@ -245,7 +253,7 @@ sub encode_parms { $_[0]->{_encode_parms} }
 
 # Our core decode/encode functions.  If encode_parms is empty, we still need
 # to encode to UTF-8, since libapreq won't handle wide characters.
-sub _decode { $_[2] || Encode::decode($_[0]->decode_parms,  $_[1]) }
+sub _decode { Encode::decode($_[2] || $_[0]->decode_parms,  $_[1]) }
 sub _encode { Encode::encode($_[0]->encode_parms || 'utf8', $_[1]) }
 
 # Handling of Content-Disposition parameter values (form field names and
@@ -306,7 +314,7 @@ sub _mangle_parms {
 		$charset = $tmp{charset};
 	}
 
-	my $old_parms = $self->parms;
+	my $old_parms = $self->SUPER::parms;
 	my $new_parms = new Apache::Table $self, scalar keys %$old_parms;
 
 	$old_parms->do( sub {
@@ -327,7 +335,7 @@ sub _mangle_parms {
 		if ($self->SUPER::upload($key)) {
 			$val = $self->_decode_value($val)
 		} else {
-			$val = $self->_decode($val);
+			$val = $self->_decode($val, $charset);
 		}
 
 		$_ = $self->_encode($_) foreach $key, $val;
@@ -338,7 +346,7 @@ sub _mangle_parms {
 	} );
 
 	$self->{_old_parms} = $old_parms;
-	$self->parms($new_parms);
+	$self->SUPER::parms($new_parms);
 }
 
 sub args { carp "args() is not supported"; $_[0]->SUPER::args }
@@ -447,7 +455,13 @@ __END__
 =item *
 
 Calling I<parms>() is not supported if ENCODE_PARMS is empty, as
-I<Apache::Table> cannot handle character strings.
+I<Apache::Table> cannot handle character strings.  This also applies to
+calling I<param>() in scalar context.
+
+=item *
+
+Query parameter keys may or may not be case-insensitive, depending on their
+contents and on ENCODE_PARMS.
 
 =item *
 
@@ -504,6 +518,12 @@ field name.  In other words, don't try this either:
 
   <INPUT TYPE=text NAME="foo">
   <INPUT TYPE=file NAME="foo">
+
+=item *
+
+Since all query parameter keys are stored in encoded form within an
+I<Apache::Table> (which is case-insensitive), it is possible for two distinct
+keys to be fused together if their encoded representations are similar.
   
 =back
 
@@ -551,10 +571,6 @@ stray.
 
 Write a short text about the various standards and issues.
 
-=item *
-
-Create a test suite based on I<Apache::Test>.
-
 
 =head1 SEE ALSO
 
@@ -568,6 +584,7 @@ Create a test suite based on I<Apache::Test>.
  RFC 2070 - Internationalization of the Hypertext Markup Language [5.2]
  RFC 2183 - Communicating Presentation Information in Internet Messages: The Content-Disposition Header Field [2, 2.3]
  RFC 2184 - MIME Parameter Value and Encoded Word Extensions: Character Sets, Languages, and Continuations [esp. 4]
+ RFC 2388 - Returning Values from Forms: multipart/form-data
 
 =head1 AUTHOR
 

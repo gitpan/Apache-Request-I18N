@@ -1,5 +1,20 @@
 Revision history for Perl extension Apache::Request::I18N.
 
+0.05  Fri Dec  2 20:50:59 2005
+	- Added testing using Apache::Test
+
+	Enhancements:
+	- Uploads are now automatically blessed in the appropriate subclass
+
+	Bugfixes:
+	- Suppressed parms() warning that occurred when ENCODE_PARMS was empty
+	- Fixed incorrect handling of Content-Type charset in form-urlencoded
+
+	Documentation:
+	- Mention case-insentivity mess in compatibility issues
+	- Explicitly mention scalar(param()) in compatibility issues
+	- Added reference to RFC 2388
+
 0.04  Sun Nov 27 23:57:13 2005
 	- First public release
 	- Brought the documentation to an acceptable level

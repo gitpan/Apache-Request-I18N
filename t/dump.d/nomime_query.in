@@ -1,0 +1,10 @@
+# No MIME-decoding on query string
+POST /latin1?author=%3d?UTF-8?B?RnLDqWTDqXJpYyBCcmnDqHJl?%3d HTTP/1.0
+Content-Type: multipart/form-data; boundary="FOO FOO"
+
+--FOO FOO
+Content-Disposition: form-data; name="auteur"
+
+Frédéric Brière
+--FOO FOO--
+
