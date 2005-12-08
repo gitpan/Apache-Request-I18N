@@ -10,7 +10,7 @@ use Encode qw(decode_utf8 encode_utf8);
 
 our @ISA = 'Apache::Request';
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 
 =head1 NAME
@@ -68,7 +68,7 @@ available options are:
 
 I<Required>.  Declares the character encoding that will be used by default
 when decoding form field names and values.  This character encoding must be
-supported by the I<Encode> module (see L<Encode> for more details).
+supported by the I<Encode> module (see L<Encode::Supported> for more details).
 
 =item ENCODE_PARMS (I<EncodeParms>)
 
@@ -143,7 +143,8 @@ sub instance {
 
 Almost all I<Apache::Request> methods are supported (see L<"COMPATIBILITY
 ISSUES"> below for a list of exceptions), and will properly return values
-according to ENCODE_PARMS.
+according to ENCODE_PARMS.  (I<Apache> methods, like I<args>(), are not
+affected by this module.)
 
 All arguments passed to a method must be encoded to ENCODE_PARMS beforehand,
 unless ENCODE_PARMS is empty.  This also applies to each key/value of any
@@ -349,8 +350,6 @@ sub _mangle_parms {
 	$self->SUPER::parms($new_parms);
 }
 
-sub args { carp "args() is not supported"; $_[0]->SUPER::args }
-
 
 package Apache::Upload::I18N;
 
@@ -467,10 +466,6 @@ contents and on ENCODE_PARMS.
 
 Calling I<next>() on an upload object is not currently supported.
 
-=item *
-
-Calling I<args>() is not supported.
-
 =back
 
 
@@ -583,7 +578,7 @@ Write a short text about the various standards and issues.
  RFC 2047 - MIME (Multipurpose Internet Mail Extensions) Part Three: Message Header Extensions for Non-ASCII Text [5]
  RFC 2070 - Internationalization of the Hypertext Markup Language [5.2]
  RFC 2183 - Communicating Presentation Information in Internet Messages: The Content-Disposition Header Field [2, 2.3]
- RFC 2184 - MIME Parameter Value and Encoded Word Extensions: Character Sets, Languages, and Continuations [esp. 4]
+ RFC 2231 - MIME Parameter Value and Encoded Word Extensions: Character Sets, Languages, and Continuations
  RFC 2388 - Returning Values from Forms: multipart/form-data
 
 =head1 AUTHOR

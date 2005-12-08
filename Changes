@@ -1,5 +1,9 @@
 Revision history for Perl extension Apache::Request::I18N.
 
+0.06  Thu Dec  8 01:52:49 2005
+	- Suppress args() overriding and related warning
+	- Minor documentation fixes
+
 0.05  Fri Dec  2 20:50:59 2005
 	- Added testing using Apache::Test
 
