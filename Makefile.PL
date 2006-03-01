@@ -42,11 +42,11 @@ EOF
 
 WriteMakefile(
     NAME              => 'Apache::Request::I18N',
-    VERSION_FROM      => 'lib/Apache/Request/I18N.pm',
+    VERSION_FROM      => 'I18N.pm',
     PREREQ_PM         => {
     				'Apache::Test'		=> MIN_APACHE_TEST_VERSION,
 				# libapreq
-    				'Apache::Request'	=> 1.11,
+    				'Apache::Request'	=> 0.32,
 				# mod_perl 1.x
     				'Apache::Constants'	=> 0,
     				'Apache::Table'		=> 0,
@@ -57,6 +57,6 @@ WriteMakefile(
     clean             => { FILES => 't/TEST' },
     test              => { TESTS => HAVE_APACHE_TEST ? '' : 't/00_load.t' },
     ($] >= 5.005 ?
-      (ABSTRACT_FROM  => 'lib/Apache/Request/I18N.pm',
+      (ABSTRACT_FROM  => 'I18N.pm',
        AUTHOR         => 'Frédéric Brière <fbriere@fbriere.net>') : ()),
 );

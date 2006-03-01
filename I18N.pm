@@ -4,13 +4,13 @@ use 5.008;
 use strict;
 use warnings;
 
-use Apache::Request 1.11;
+use Apache::Request 0.32;
 use Carp;
 use Encode qw(decode_utf8 encode_utf8);
 
 our @ISA = 'Apache::Request';
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 
 =head1 NAME

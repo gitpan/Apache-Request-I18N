@@ -1,5 +1,9 @@
 Revision history for Perl extension Apache::Request::I18N.
 
+0.07  Tue Feb 28 20:50:30 2006
+	- Dropped Apache::Request requirement to 0.32
+	- Moved I18N.pm to top-level directory
+
 0.06  Thu Dec  8 01:52:49 2005
 	- Suppress args() overriding and related warning
 	- Minor documentation fixes

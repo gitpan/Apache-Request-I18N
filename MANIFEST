@@ -1,5 +1,5 @@
 Changes
-lib/Apache/Request/I18N.pm
+I18N.pm
 Makefile.PL
 MANIFEST
 README
