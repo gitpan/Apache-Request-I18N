@@ -1,5 +1,8 @@
 Revision history for Perl extension Apache::Request::I18N.
 
+0.08  Sat Jul 29 03:25:36 2006
+	- Fixed query string parsing
+
 0.07  Tue Feb 28 20:50:30 2006
 	- Dropped Apache::Request requirement to 0.32
 	- Moved I18N.pm to top-level directory

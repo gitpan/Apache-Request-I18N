@@ -1,4 +1,5 @@
 %vars = (
-	author		=> [ '=?UTF-8?B?RnLDqWTDqXJpYyBCcmnDqHJl?=' ],
-	auteur		=> [ 'Frédéric Brière' ],
+	'=?UTF-8?Q?auteur?='	=> [ '=?UTF-8?B?RnLDqWTDqXJpYyBCcmnDqHJl?=' ],
+	auteur			=> [ 'Frédéric Brière' ],
+	dummy			=> [ '' ],
 	);

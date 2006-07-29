@@ -1,5 +1,6 @@
 # No MIME-decoding on query string
-POST /latin1?author=%3d?UTF-8?B?RnLDqWTDqXJpYyBCcmnDqHJl?%3d HTTP/1.0
+# (dummy is there to fool Apache->args, which we once used)
+POST /latin1?dummy&%3d?UTF-8?Q?auteur?%3d=%3d?UTF-8?B?RnLDqWTDqXJpYyBCcmnDqHJl?%3d HTTP/1.0
 Content-Type: multipart/form-data; boundary="FOO FOO"
 
 --FOO FOO

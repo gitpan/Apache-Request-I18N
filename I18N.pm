@@ -10,7 +10,7 @@ use Encode qw(decode_utf8 encode_utf8);
 
 our @ISA = 'Apache::Request';
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 
 =head1 NAME
@@ -304,7 +304,14 @@ sub _mangle_parms {
 	my ($self) = @_;
 
 	# Remember which arguments were passed on the query string
-	my %args = $self->SUPER::args;
+	# 
+	# This used to call Apache->args, but it doesn't behave so well with
+	# ill-formed query strings.  Apache::Request->query_params would be
+	# nice, but it was introduced in 1.3, and Debian sarge only has 1.1.
+	my %args = map { defined $_ ? $_ : '' }
+			map Apache::unescape_url_info(defined $_ ? $_ : ''),
+				map /^([^=]*)(?:=(.*))?/,
+					split /[&;]+/ => $self->query_string;
 
 	# Extract the Content-Type charset for x-www-form-urlencoded
 	my ($is_urlenc, $charset);
@@ -587,7 +594,7 @@ Frédéric Brière, E<lt>fbriere@fbriere.netE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2005 by Frédéric Brière
+Copyright (C) 2005, 2006 by Frédéric Brière
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.7 or,
